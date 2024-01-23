@@ -11,6 +11,34 @@
 
 <body>
 
+  <div id="app">
+    <div class="todo">
+      <form class="todo-form">
+        <label class="todo-form__label">
+          <input class="todo-field" placeholder="Add task...">
+        </label>
+        <button class="todo-form__btn">Submit</button>
+      </form>
+      <div class="todo__panel">
+        <div class="todo__panel-info" id="todo-all">
+          All tasks:<span>10</span>
+        </div>
+        <div class="todo__panel-info" id="todo-important">
+          Important:<span>10</span>
+        </div>
+      </div>
+      <ul class="todo__list">
+        <!-- <li class="todo__item">
+          <span class="todo__item-title">Title</span>
+          <button class="todo__item-btn todo__item-delete"></button>
+        </li> -->
+
+        <li class="todo__item todo__item--msg">There are no tasks...</li>
+
+      </ul>
+    </div>
+  </div>
+
 </body>
 
 </html>

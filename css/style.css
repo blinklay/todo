@@ -161,11 +161,12 @@ ul {
   width: 35px;
   height: 35px;
   transition: .2s;
-  border: 2px solid transparent;
+  /* border: 2px solid transparent; */
 }
 
 .todo__item-delete:hover {
-  border: 2px solid #cbf1ff;
+  background-color: #ffcbcb;
+  /* border: 2px solid #cbf1ff; */
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px inset;
 }
 

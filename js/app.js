@@ -2,6 +2,7 @@ const TODO_FORM = document.getElementById('todo-form')
 const TODO_INPUT = document.getElementById('todo-inp')
 const TODO_LIST = document.getElementById('todo-list')
 const TODO_LENGTH = document.getElementById('todo-all')
+const TODO_IMPORTANT_LENGTH = document.getElementById('todo-important')
 
 class TodoLocalStorage {
   constructor() {
@@ -22,6 +23,12 @@ class TodoLocalStorage {
     localStorage.setItem(this.keyName, JSON.stringify(tasks))
   }
 
+  removeLocalStorageData(id) {
+    const tasks = this.getLocalStorageData()
+    const index = tasks.findIndex(item => item.id === id)
+    tasks.splice(index, 1)
+    localStorage.setItem(this.keyName, JSON.stringify(tasks))
+  }
 }
 
 const todoLocalStorage = new TodoLocalStorage()
@@ -31,6 +38,7 @@ class Todo {
     this.render()
     this.updateUi()
     TODO_FORM.addEventListener('submit', this.createTask.bind(this))
+    TODO_LIST.addEventListener('click', this.removeTask.bind(this))
   }
 
   createTask(e) {
@@ -55,7 +63,7 @@ class Todo {
     let html = ""
     tasks.forEach(({ id, title }) => {
       html += `
-      <li class="todo__item">
+      <li class="todo__item" data-id="${id}">
           <span class="todo__item-title">${title}</span>
           <button class="todo__item-btn todo__item-delete"></button>
         </li>`
@@ -64,9 +72,28 @@ class Todo {
     this.updateUi()
   }
 
+  removeTask(e) {
+    if (e.target.classList.contains('todo__item-delete')) {
+      const parent = e.target.parentElement
+      const id = +parent.dataset.id
+
+
+      parent.classList.add('todo__item--hide')
+      setTimeout(() => {
+        parent.remove()
+      }, 300);
+
+      // remove task inner localStorage
+      todoLocalStorage.removeLocalStorageData(id)
+      this.updateUi()
+    }
+  }
+
   updateUi() {
     const tasks = todoLocalStorage.getLocalStorageData()
+    const importantTasks = tasks.filter(task => task.important)
     TODO_LENGTH.textContent = tasks.length
+    TODO_IMPORTANT_LENGTH.textContent = importantTasks.length
   }
 }
 

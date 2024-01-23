@@ -141,6 +141,11 @@ ul {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  transition: .3s;
+}
+
+.todo__item--hide {
+  transform: scale(0);
 }
 
 .todo__item-btn {

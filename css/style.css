@@ -209,6 +209,46 @@ ul {
   justify-content: center;
 }
 
+.modal__item {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+
+  display: flex;
+  justify-content: center;
+  align-content: center;
+}
+
+.modal__item--hide .modal__item-body {
+  transform: translateY(-100%);
+}
+
+.modal__item-body {
+  background-color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 15px 20px;
+  border-radius: 10px;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  border-bottom: 3px solid #d3fff5;
+  transition: .2s;
+}
+
+
+.modal__text {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.modal__img {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+}
+
 @keyframes gradient {
   0% {
     background-position: 0% 50%;

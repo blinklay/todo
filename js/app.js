@@ -3,6 +3,7 @@ const TODO_INPUT = document.getElementById('todo-inp')
 const TODO_LIST = document.getElementById('todo-list')
 const TODO_LENGTH = document.getElementById('todo-all')
 const TODO_IMPORTANT_LENGTH = document.getElementById('todo-important')
+const MODAL = document.getElementById('modal')
 
 class TodoLocalStorage {
   constructor() {
@@ -40,6 +41,36 @@ class TodoLocalStorage {
 
 const todoLocalStorage = new TodoLocalStorage()
 
+class Modal {
+  render(msg) {
+    const item = document.createElement('div')
+    item.classList.add('modal__item', 'modal__item--hide')
+    item.innerHTML = `<div class="modal__item-body">
+          <img class="modal__img" src="./img/done.png">
+          <span class="modal__text">${msg}</span>
+       </div>`
+
+    MODAL.appendChild(item)
+    setTimeout(() => {
+      item.classList.remove('modal__item--hide')
+    }, 200);
+
+    setTimeout(() => {
+      this.remove()
+    }, 2000);
+  }
+
+  remove() {
+    const item = document.querySelector('.modal__item')
+    item.classList.add('modal__item--hide')
+    setTimeout(() => {
+      item.remove()
+    }, 200);
+  }
+}
+
+const modal = new Modal()
+
 class Todo {
   constructor() {
     this.render()
@@ -61,7 +92,9 @@ class Todo {
       }
       todoLocalStorage.addLocalStorageData(task)
 
+      modal.render('Task created!')
       this.render()
+      TODO_INPUT.value = ""
     }
   }
 
@@ -70,13 +103,16 @@ class Todo {
     let html = ""
     let importantClass = ""
     tasks.forEach(({ id, title, important }) => {
-      important ? importantClass = "item-important" : ""
+      if (important) importantClass = "item-important"
+
       html += `
       <li class="todo__item ${importantClass}" data-id="${id}">
       <button class="todo__item-btn todo__item-important">!</button>
           <span class="todo__item-title">${title}</span>
           <button class="todo__item-btn todo__item-delete"></button>
         </li>`
+
+      importantClass = ""
     })
     TODO_LIST.innerHTML = html
     this.updateUi()

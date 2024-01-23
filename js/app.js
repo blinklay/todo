@@ -29,6 +29,13 @@ class TodoLocalStorage {
     tasks.splice(index, 1)
     localStorage.setItem(this.keyName, JSON.stringify(tasks))
   }
+
+  addImportantStatus(id) {
+    const tasks = this.getLocalStorageData()
+    const index = tasks.findIndex(item => item.id === id)
+    tasks[index].important = !tasks[index].important
+    localStorage.setItem(this.keyName, JSON.stringify(tasks))
+  }
 }
 
 const todoLocalStorage = new TodoLocalStorage()
@@ -38,7 +45,7 @@ class Todo {
     this.render()
     this.updateUi()
     TODO_FORM.addEventListener('submit', this.createTask.bind(this))
-    TODO_LIST.addEventListener('click', this.removeTask.bind(this))
+    TODO_LIST.addEventListener('click', this.actionTask.bind(this))
   }
 
   createTask(e) {
@@ -61,9 +68,12 @@ class Todo {
   render() {
     const tasks = todoLocalStorage.getLocalStorageData()
     let html = ""
-    tasks.forEach(({ id, title }) => {
+    let importantClass = ""
+    tasks.forEach(({ id, title, important }) => {
+      important ? importantClass = "item-important" : ""
       html += `
-      <li class="todo__item" data-id="${id}">
+      <li class="todo__item ${importantClass}" data-id="${id}">
+      <button class="todo__item-btn todo__item-important">!</button>
           <span class="todo__item-title">${title}</span>
           <button class="todo__item-btn todo__item-delete"></button>
         </li>`
@@ -72,11 +82,11 @@ class Todo {
     this.updateUi()
   }
 
-  removeTask(e) {
+  actionTask(e) {
+    // Delete current task
     if (e.target.classList.contains('todo__item-delete')) {
       const parent = e.target.parentElement
       const id = +parent.dataset.id
-
 
       parent.classList.add('todo__item--hide')
       setTimeout(() => {
@@ -85,6 +95,15 @@ class Todo {
 
       // remove task inner localStorage
       todoLocalStorage.removeLocalStorageData(id)
+      this.updateUi()
+    }
+
+    if (e.target.classList.contains('todo__item-important')) {
+      const parent = e.target.parentElement
+      const id = +parent.dataset.id
+
+      parent.classList.toggle('item-important')
+      todoLocalStorage.addImportantStatus(id)
       this.updateUi()
     }
   }

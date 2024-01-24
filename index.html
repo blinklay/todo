@@ -25,6 +25,14 @@
           Important:<span id="todo-important">10</span>
         </div>
       </div>
+      <div class="todo__actions">
+        <span>Sorted by</span>
+        <select class="todo__actions-select" id="todo-select">
+          <option class="todo__actions-option" value="important">Important</option>
+          <option class="todo__actions-option" value="increasing">A - z</option>
+          <option class="todo__actions-option" value="decreasing">Z - a</option>
+        </select>
+      </div>
       <ul class="todo__list" id="todo-list">
         <li class="todo__item todo__item--msg">There are no tasks...</li>
       </ul>

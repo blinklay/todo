@@ -262,6 +262,23 @@ ul {
   object-fit: contain;
 }
 
+.todo__actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: var(--spacing-small) var(--spacing-medium);
+}
+
+.todo__actions-select {
+  font-family: inherit;
+  font-size: inherit;
+  padding: 5px 8px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  border: 2px solid var(--color-blue);
+}
+
 @keyframes gradient {
   0% {
     background-position: 0% 50%;

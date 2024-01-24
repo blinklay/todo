@@ -4,6 +4,7 @@ const TODO_LIST = document.getElementById('todo-list')
 const TODO_LENGTH = document.getElementById('todo-all')
 const TODO_IMPORTANT_LENGTH = document.getElementById('todo-important')
 const MODAL = document.getElementById('modal')
+const SORT_SELECT = document.getElementById('todo-select')
 
 class TodoLocalStorage {
   constructor() {
@@ -35,6 +36,10 @@ class TodoLocalStorage {
     const tasks = this.getLocalStorageData()
     const index = tasks.findIndex(item => item.id === id)
     tasks[index].important = !tasks[index].important
+    localStorage.setItem(this.keyName, JSON.stringify(tasks))
+  }
+
+  updateLocalStorageData(tasks) {
     localStorage.setItem(this.keyName, JSON.stringify(tasks))
   }
 }
@@ -77,6 +82,7 @@ class Todo {
     this.updateUi()
     TODO_FORM.addEventListener('submit', this.createTask.bind(this))
     TODO_LIST.addEventListener('click', this.actionTask.bind(this))
+    SORT_SELECT.addEventListener('change', this.sortTasks.bind(this))
   }
 
   createTask(e) {
@@ -132,6 +138,7 @@ class Todo {
       // remove task inner localStorage
       todoLocalStorage.removeLocalStorageData(id)
       this.updateUi()
+      modal.render('Task removed!')
     }
 
     if (e.target.classList.contains('todo__item-important')) {
@@ -141,12 +148,32 @@ class Todo {
       parent.classList.toggle('item-important')
       todoLocalStorage.addImportantStatus(id)
       this.updateUi()
+      modal.render('Task status changed!')
     }
+  }
+
+  sortTasks(e) {
+    const tasks = todoLocalStorage.getLocalStorageData()
+
+    const sortActions = {
+      increasing: (a, b) => a.title.localeCompare(b.title),
+      decreasing: (a, b) => b.title.localeCompare(a.title),
+      important: (a, b) => b.important - a.important,
+    }
+
+    const sortedTasks = tasks.sort(sortActions[e.target.value]);
+    todoLocalStorage.updateLocalStorageData(sortedTasks)
+    this.render()
   }
 
   updateUi() {
     const tasks = todoLocalStorage.getLocalStorageData()
     const importantTasks = tasks.filter(task => task.important)
+
+    if (tasks.length === 0) {
+      TODO_LIST.innerHTML = `<li class="todo__item todo__item--msg">There are no tasks...</li>`
+    }
+
     TODO_LENGTH.textContent = tasks.length
     TODO_IMPORTANT_LENGTH.textContent = importantTasks.length
   }

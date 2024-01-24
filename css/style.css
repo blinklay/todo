@@ -200,10 +200,21 @@ ul {
   box-shadow: var(--box-shadow-inset);
 }
 
+.todo__item-info {
+  display: flex;
+  flex-direction: column;
+  margin-right: auto;
+}
+
+.todo__item-date {
+  font-size: 12px;
+  color: rgba(100, 100, 111, 0.6);
+}
+
 .todo__item-title {
   border-bottom: 2px solid var(--color-red);
   font-weight: bold;
-  margin-right: auto;
+  line-height: 1.1;
 }
 
 

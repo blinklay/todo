@@ -85,6 +85,18 @@ class Todo {
     SORT_SELECT.addEventListener('change', this.sortTasks.bind(this))
   }
 
+  getCurrentDate() {
+    const currentDate = new Date();
+
+    const day = String(currentDate.getDate()).padStart(2, '0');
+    const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Месяцы начинаются с 0
+    const year = currentDate.getFullYear();
+
+    const formattedDate = `${day}.${month}.${year}`;
+
+    return formattedDate;
+  }
+
   createTask(e) {
     e.preventDefault()
 
@@ -95,6 +107,7 @@ class Todo {
         id: taskId,
         title: todoTitle,
         important: false,
+        date: this.getCurrentDate()
       }
       todoLocalStorage.addLocalStorageData(task)
 
@@ -108,13 +121,16 @@ class Todo {
     const tasks = todoLocalStorage.getLocalStorageData()
     let html = ""
     let importantClass = ""
-    tasks.forEach(({ id, title, important }) => {
+    tasks.forEach(({ id, title, important, date }) => {
       if (important) importantClass = "item-important"
 
       html += `
       <li class="todo__item ${importantClass}" data-id="${id}">
       <button class="todo__item-btn todo__item-important">!</button>
+        <div class="todo__item-info">
           <span class="todo__item-title">${title}</span>
+          <span class="todo__item-date">${date}</span>
+        </div>
           <button class="todo__item-btn todo__item-delete"></button>
         </li>`
 
@@ -159,6 +175,7 @@ class Todo {
       increasing: (a, b) => a.title.localeCompare(b.title),
       decreasing: (a, b) => b.title.localeCompare(a.title),
       important: (a, b) => b.important - a.important,
+      date: (a, b) => b.date - a.date,
     }
 
     const sortedTasks = tasks.sort(sortActions[e.target.value]);

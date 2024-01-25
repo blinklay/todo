@@ -149,14 +149,19 @@ class Todo {
       const parent = e.target.parentElement
       const id = +parent.dataset.id
 
-      parent.classList.add('todo__item--hide')
+      parent.classList.add('todo__item--done')
+      setTimeout(() => {
+        parent.classList.add('todo__item--hide')
+      }, 300);
       setTimeout(() => {
         parent.remove()
-      }, 300);
+      }, 600);
 
       // remove task inner localStorage
       todoLocalStorage.removeLocalStorageData(id)
-      this.updateUi()
+      setTimeout(() => {
+        this.updateUi()
+      }, 600);
 
       // When deleting a task, the ID changes
       this.changeId()

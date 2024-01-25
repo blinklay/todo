@@ -35,6 +35,9 @@ class TodoLocalStorage {
   addImportantStatus(id) {
     const tasks = this.getLocalStorageData()
     const index = tasks.findIndex(item => item.id === id)
+
+    if (!tasks[index]) return
+
     tasks[index].important = !tasks[index].important
     localStorage.setItem(this.keyName, JSON.stringify(tasks))
   }
@@ -154,6 +157,9 @@ class Todo {
       // remove task inner localStorage
       todoLocalStorage.removeLocalStorageData(id)
       this.updateUi()
+
+      // When deleting a task, the ID changes
+      this.changeId()
       modal.render('Task removed!')
     }
 
@@ -181,6 +187,17 @@ class Todo {
     const sortedTasks = tasks.sort(sortActions[e.target.value]);
     todoLocalStorage.updateLocalStorageData(sortedTasks)
     this.render()
+  }
+
+  changeId() {
+    const tasks = todoLocalStorage.getLocalStorageData()
+
+    for (let i = 0; i < tasks.length; i++) {
+      tasks[i].id = i
+      console.log(i);
+    }
+
+    todoLocalStorage.updateLocalStorageData(tasks)
   }
 
   updateUi() {

@@ -5,6 +5,7 @@ const TODO_LENGTH = document.getElementById('todo-all')
 const TODO_IMPORTANT_LENGTH = document.getElementById('todo-important')
 const MODAL = document.getElementById('modal')
 const SORT_SELECT = document.getElementById('todo-select')
+const BTN_DELETE_ALL = document.getElementById('todo-delete-all')
 
 class TodoLocalStorage {
   constructor() {
@@ -85,6 +86,7 @@ class Todo {
     this.updateUi()
     TODO_FORM.addEventListener('submit', this.createTask.bind(this))
     TODO_LIST.addEventListener('click', this.actionTask.bind(this))
+    BTN_DELETE_ALL.addEventListener('click', this.deleteAllTasks.bind(this))
     SORT_SELECT.addEventListener('change', this.sortTasks.bind(this))
   }
 
@@ -199,10 +201,31 @@ class Todo {
 
     for (let i = 0; i < tasks.length; i++) {
       tasks[i].id = i
-      console.log(i);
     }
 
     todoLocalStorage.updateLocalStorageData(tasks)
+  }
+
+  deleteAllTasks() {
+    const tasks = todoLocalStorage.getLocalStorageData()
+    if (tasks.length === 0) return
+    tasks.forEach(({ id }) => {
+      todoLocalStorage.removeLocalStorageData(id)
+    })
+
+    document.querySelectorAll('.todo__item').forEach(task => {
+      task.classList.add('todo__item--done')
+      setTimeout(() => {
+        task.classList.add('todo__item--hide')
+      }, 300);
+      setTimeout(() => {
+        task.remove()
+      }, 600);
+    })
+
+    setTimeout(() => {
+      this.updateUi()
+    }, 600);
   }
 
   updateUi() {

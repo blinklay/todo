@@ -302,6 +302,20 @@ ul {
   border: 2px solid var(--color-blue);
 }
 
+.todo__actions-btn {
+  cursor: pointer;
+  margin-left: auto;
+  border: none;
+  background-color: var(--color-red);
+  border-radius: 5px;
+  padding: 5px var(--spacing-small);
+  transition: .2s;
+}
+
+.todo__actions-btn:hover {
+  background-color: var(--color-blue);
+}
+
 @keyframes gradient {
   0% {
     background-position: 0% 50%;
